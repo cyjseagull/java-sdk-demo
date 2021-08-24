@@ -1,5 +1,6 @@
 package org.fisco.bcos.sdk.demo.contract;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -115,6 +116,7 @@ public class SM2EvidenceVerify extends Contract {
     }
 
     public String getSignedTransactionForInsertEvidence(
+            BigInteger blockLimit,
             String evi,
             String info,
             String id,
@@ -136,7 +138,7 @@ public class SM2EvidenceVerify extends Contract {
                                 new org.fisco.bcos.sdk.abi.datatypes.generated.Bytes32(r),
                                 new org.fisco.bcos.sdk.abi.datatypes.generated.Bytes32(s)),
                         Collections.<TypeReference<?>>emptyList());
-        return createSignedTransaction(function);
+        return createSignedTransaction(blockLimit, function);
     }
 
     public Tuple8<String, String, String, String, byte[], byte[], byte[], byte[]>

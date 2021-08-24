@@ -1,5 +1,6 @@
 package org.fisco.bcos.sdk.demo.contract;
 
+import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -68,13 +69,13 @@ public class HelloWorld extends Contract {
         asyncExecuteTransaction(function, callback);
     }
 
-    public String getSignedTransactionForSet(String n) {
+    public String getSignedTransactionForSet(BigInteger blockLimit, String n) {
         final Function function =
                 new Function(
                         FUNC_SET,
                         Arrays.<Type>asList(new org.fisco.bcos.sdk.abi.datatypes.Utf8String(n)),
                         Collections.<TypeReference<?>>emptyList());
-        return createSignedTransaction(function);
+        return createSignedTransaction(blockLimit, function);
     }
 
     public Tuple1<String> getSetInput(TransactionReceipt transactionReceipt) {

@@ -82,7 +82,7 @@ public class DagTransfer extends Contract {
     }
 
     public String getSignedTransactionForUserTransfer(
-            String user_a, String user_b, BigInteger amount) {
+            BigInteger blockLimit, String user_a, String user_b, BigInteger amount) {
         final Function function =
                 new Function(
                         FUNC_USERTRANSFER,
@@ -91,7 +91,7 @@ public class DagTransfer extends Contract {
                                 new org.fisco.bcos.sdk.abi.datatypes.Utf8String(user_b),
                                 new org.fisco.bcos.sdk.abi.datatypes.generated.Uint256(amount)),
                         Collections.<TypeReference<?>>emptyList());
-        return createSignedTransaction(function);
+        return createSignedTransaction(blockLimit, function);
     }
 
     public Tuple3<String, String, BigInteger> getUserTransferInput(
@@ -157,7 +157,8 @@ public class DagTransfer extends Contract {
         asyncExecuteTransaction(function, callback);
     }
 
-    public String getSignedTransactionForUserAdd(String user, BigInteger balance) {
+    public String getSignedTransactionForUserAdd(
+            BigInteger blockLimit, String user, BigInteger balance) {
         final Function function =
                 new Function(
                         FUNC_USERADD,
@@ -165,7 +166,7 @@ public class DagTransfer extends Contract {
                                 new org.fisco.bcos.sdk.abi.datatypes.Utf8String(user),
                                 new org.fisco.bcos.sdk.abi.datatypes.generated.Uint256(balance)),
                         Collections.<TypeReference<?>>emptyList());
-        return createSignedTransaction(function);
+        return createSignedTransaction(blockLimit, function);
     }
 
     public Tuple2<String, BigInteger> getUserAddInput(TransactionReceipt transactionReceipt) {
@@ -215,7 +216,8 @@ public class DagTransfer extends Contract {
         asyncExecuteTransaction(function, callback);
     }
 
-    public String getSignedTransactionForUserSave(String user, BigInteger balance) {
+    public String getSignedTransactionForUserSave(
+            BigInteger blockLimit, String user, BigInteger balance) {
         final Function function =
                 new Function(
                         FUNC_USERSAVE,
@@ -223,7 +225,7 @@ public class DagTransfer extends Contract {
                                 new org.fisco.bcos.sdk.abi.datatypes.Utf8String(user),
                                 new org.fisco.bcos.sdk.abi.datatypes.generated.Uint256(balance)),
                         Collections.<TypeReference<?>>emptyList());
-        return createSignedTransaction(function);
+        return createSignedTransaction(blockLimit, function);
     }
 
     public Tuple2<String, BigInteger> getUserSaveInput(TransactionReceipt transactionReceipt) {
@@ -273,7 +275,8 @@ public class DagTransfer extends Contract {
         asyncExecuteTransaction(function, callback);
     }
 
-    public String getSignedTransactionForUserDraw(String user, BigInteger balance) {
+    public String getSignedTransactionForUserDraw(
+            BigInteger blockLimit, String user, BigInteger balance) {
         final Function function =
                 new Function(
                         FUNC_USERDRAW,
@@ -281,7 +284,7 @@ public class DagTransfer extends Contract {
                                 new org.fisco.bcos.sdk.abi.datatypes.Utf8String(user),
                                 new org.fisco.bcos.sdk.abi.datatypes.generated.Uint256(balance)),
                         Collections.<TypeReference<?>>emptyList());
-        return createSignedTransaction(function);
+        return createSignedTransaction(blockLimit, function);
     }
 
     public Tuple2<String, BigInteger> getUserDrawInput(TransactionReceipt transactionReceipt) {

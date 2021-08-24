@@ -79,14 +79,14 @@ public class Ok extends Contract {
         asyncExecuteTransaction(function, callback);
     }
 
-    public String getSignedTransactionForTrans(BigInteger num) {
+    public String getSignedTransactionForTrans(BigInteger blockLimit, BigInteger num) {
         final Function function =
                 new Function(
                         FUNC_TRANS,
                         Arrays.<Type>asList(
                                 new org.fisco.bcos.sdk.abi.datatypes.generated.Uint256(num)),
                         Collections.<TypeReference<?>>emptyList());
-        return createSignedTransaction(function);
+        return createSignedTransaction(blockLimit, function);
     }
 
     public Tuple1<BigInteger> getTransInput(TransactionReceipt transactionReceipt) {

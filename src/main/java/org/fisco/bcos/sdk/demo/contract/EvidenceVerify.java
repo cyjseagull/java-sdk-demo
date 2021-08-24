@@ -113,6 +113,7 @@ public class EvidenceVerify extends Contract {
     }
 
     public String getSignedTransactionForInsertEvidence(
+            BigInteger blockLimit,
             String evi,
             String info,
             String id,
@@ -134,7 +135,7 @@ public class EvidenceVerify extends Contract {
                                 new org.fisco.bcos.sdk.abi.datatypes.generated.Bytes32(r),
                                 new org.fisco.bcos.sdk.abi.datatypes.generated.Bytes32(s)),
                         Collections.<TypeReference<?>>emptyList());
-        return createSignedTransaction(function);
+        return createSignedTransaction(blockLimit, function);
     }
 
     public Tuple8<String, String, String, String, byte[], BigInteger, byte[], byte[]>

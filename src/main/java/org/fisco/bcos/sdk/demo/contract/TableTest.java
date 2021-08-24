@@ -111,7 +111,8 @@ public class TableTest extends Contract {
         asyncExecuteTransaction(function, callback);
     }
 
-    public String getSignedTransactionForUpdate(String name, BigInteger item_id, String item_name) {
+    public String getSignedTransactionForUpdate(
+            BigInteger blockLimit, String name, BigInteger item_id, String item_name) {
         final Function function =
                 new Function(
                         FUNC_UPDATE,
@@ -120,7 +121,7 @@ public class TableTest extends Contract {
                                 new org.fisco.bcos.sdk.abi.datatypes.generated.Int256(item_id),
                                 new org.fisco.bcos.sdk.abi.datatypes.Utf8String(item_name)),
                         Collections.<TypeReference<?>>emptyList());
-        return createSignedTransaction(function);
+        return createSignedTransaction(blockLimit, function);
     }
 
     public Tuple3<String, BigInteger, String> getUpdateInput(
@@ -174,7 +175,8 @@ public class TableTest extends Contract {
         asyncExecuteTransaction(function, callback);
     }
 
-    public String getSignedTransactionForRemove(String name, BigInteger item_id) {
+    public String getSignedTransactionForRemove(
+            BigInteger blockLimit, String name, BigInteger item_id) {
         final Function function =
                 new Function(
                         FUNC_REMOVE,
@@ -182,7 +184,7 @@ public class TableTest extends Contract {
                                 new org.fisco.bcos.sdk.abi.datatypes.Utf8String(name),
                                 new org.fisco.bcos.sdk.abi.datatypes.generated.Int256(item_id)),
                         Collections.<TypeReference<?>>emptyList());
-        return createSignedTransaction(function);
+        return createSignedTransaction(blockLimit, function);
     }
 
     public Tuple2<String, BigInteger> getRemoveInput(TransactionReceipt transactionReceipt) {
@@ -235,7 +237,8 @@ public class TableTest extends Contract {
         asyncExecuteTransaction(function, callback);
     }
 
-    public String getSignedTransactionForInsert(String name, BigInteger item_id, String item_name) {
+    public String getSignedTransactionForInsert(
+            BigInteger blockLimit, String name, BigInteger item_id, String item_name) {
         final Function function =
                 new Function(
                         FUNC_INSERT,
@@ -244,7 +247,7 @@ public class TableTest extends Contract {
                                 new org.fisco.bcos.sdk.abi.datatypes.generated.Int256(item_id),
                                 new org.fisco.bcos.sdk.abi.datatypes.Utf8String(item_name)),
                         Collections.<TypeReference<?>>emptyList());
-        return createSignedTransaction(function);
+        return createSignedTransaction(blockLimit, function);
     }
 
     public Tuple3<String, BigInteger, String> getInsertInput(

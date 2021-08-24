@@ -93,7 +93,7 @@ public class ParallelOk extends Contract {
     }
 
     public String getSignedTransactionForRegisterParallelFunction(
-            String functionName, BigInteger criticalSize) {
+            BigInteger blockLimit, String functionName, BigInteger criticalSize) {
         final Function function =
                 new Function(
                         FUNC_REGISTERPARALLELFUNCTION,
@@ -102,7 +102,7 @@ public class ParallelOk extends Contract {
                                 new org.fisco.bcos.sdk.abi.datatypes.generated.Uint256(
                                         criticalSize)),
                         Collections.<TypeReference<?>>emptyList());
-        return createSignedTransaction(function);
+        return createSignedTransaction(blockLimit, function);
     }
 
     public Tuple2<String, BigInteger> getRegisterParallelFunctionInput(
@@ -149,14 +149,15 @@ public class ParallelOk extends Contract {
         asyncExecuteTransaction(function, callback);
     }
 
-    public String getSignedTransactionForUnregisterParallelFunction(String functionName) {
+    public String getSignedTransactionForUnregisterParallelFunction(
+            BigInteger blockLimit, String functionName) {
         final Function function =
                 new Function(
                         FUNC_UNREGISTERPARALLELFUNCTION,
                         Arrays.<Type>asList(
                                 new org.fisco.bcos.sdk.abi.datatypes.Utf8String(functionName)),
                         Collections.<TypeReference<?>>emptyList());
-        return createSignedTransaction(function);
+        return createSignedTransaction(blockLimit, function);
     }
 
     public Tuple1<String> getUnregisterParallelFunctionInput(
@@ -193,7 +194,7 @@ public class ParallelOk extends Contract {
         asyncExecuteTransaction(function, callback);
     }
 
-    public String getSignedTransactionForSet(String name, BigInteger num) {
+    public String getSignedTransactionForSet(BigInteger blockLimit, String name, BigInteger num) {
         final Function function =
                 new Function(
                         FUNC_SET,
@@ -201,7 +202,7 @@ public class ParallelOk extends Contract {
                                 new org.fisco.bcos.sdk.abi.datatypes.Utf8String(name),
                                 new org.fisco.bcos.sdk.abi.datatypes.generated.Uint256(num)),
                         Collections.<TypeReference<?>>emptyList());
-        return createSignedTransaction(function);
+        return createSignedTransaction(blockLimit, function);
     }
 
     public Tuple2<String, BigInteger> getSetInput(TransactionReceipt transactionReceipt) {
@@ -242,7 +243,8 @@ public class ParallelOk extends Contract {
         asyncExecuteTransaction(function, callback);
     }
 
-    public String getSignedTransactionForTransfer(String from, String to, BigInteger num) {
+    public String getSignedTransactionForTransfer(
+            BigInteger blockLimit, String from, String to, BigInteger num) {
         final Function function =
                 new Function(
                         FUNC_TRANSFER,
@@ -251,7 +253,7 @@ public class ParallelOk extends Contract {
                                 new org.fisco.bcos.sdk.abi.datatypes.Utf8String(to),
                                 new org.fisco.bcos.sdk.abi.datatypes.generated.Uint256(num)),
                         Collections.<TypeReference<?>>emptyList());
-        return createSignedTransaction(function);
+        return createSignedTransaction(blockLimit, function);
     }
 
     public Tuple3<String, String, BigInteger> getTransferInput(
@@ -290,13 +292,13 @@ public class ParallelOk extends Contract {
         asyncExecuteTransaction(function, callback);
     }
 
-    public String getSignedTransactionForEnableParallel() {
+    public String getSignedTransactionForEnableParallel(BigInteger blockLimit) {
         final Function function =
                 new Function(
                         FUNC_ENABLEPARALLEL,
                         Arrays.<Type>asList(),
                         Collections.<TypeReference<?>>emptyList());
-        return createSignedTransaction(function);
+        return createSignedTransaction(blockLimit, function);
     }
 
     public TransactionReceipt disableParallel() {
@@ -317,13 +319,13 @@ public class ParallelOk extends Contract {
         asyncExecuteTransaction(function, callback);
     }
 
-    public String getSignedTransactionForDisableParallel() {
+    public String getSignedTransactionForDisableParallel(BigInteger blockLimit) {
         final Function function =
                 new Function(
                         FUNC_DISABLEPARALLEL,
                         Arrays.<Type>asList(),
                         Collections.<TypeReference<?>>emptyList());
-        return createSignedTransaction(function);
+        return createSignedTransaction(blockLimit, function);
     }
 
     public TransactionReceipt transferWithRevert(String from, String to, BigInteger num) {
@@ -352,7 +354,7 @@ public class ParallelOk extends Contract {
     }
 
     public String getSignedTransactionForTransferWithRevert(
-            String from, String to, BigInteger num) {
+            BigInteger blockLimit, String from, String to, BigInteger num) {
         final Function function =
                 new Function(
                         FUNC_TRANSFERWITHREVERT,
@@ -361,7 +363,7 @@ public class ParallelOk extends Contract {
                                 new org.fisco.bcos.sdk.abi.datatypes.Utf8String(to),
                                 new org.fisco.bcos.sdk.abi.datatypes.generated.Uint256(num)),
                         Collections.<TypeReference<?>>emptyList());
-        return createSignedTransaction(function);
+        return createSignedTransaction(blockLimit, function);
     }
 
     public Tuple3<String, String, BigInteger> getTransferWithRevertInput(
