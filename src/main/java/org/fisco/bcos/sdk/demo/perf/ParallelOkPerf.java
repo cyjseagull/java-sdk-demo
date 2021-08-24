@@ -42,6 +42,8 @@ public class ParallelOkPerf {
                 " \t java -cp 'conf/:lib/*:apps/*' org.fisco.bcos.sdk.demo.perf.ParallelOkPerf [precompiled] [groupID] [add] [count] [tps] [file].");
         System.out.println(
                 " \t java -cp 'conf/:lib/*:apps/*' org.fisco.bcos.sdk.demo.perf.ParallelOkPerf [precompiled] [groupID] [transfer] [count] [tps] [file].");
+        System.out.println(
+                " \t java -cp 'conf/:lib/*:apps/*' org.fisco.bcos.sdk.demo.perf.ParallelOkPerf [precompiled] [groupID] [generateTx] [count] [tps] [file].");
     }
 
     public static void main(String[] args)
@@ -131,7 +133,6 @@ public class ParallelOkPerf {
                 parallelOkDemo = new ParallelOkDemo(parallelOk, dagUserInfo, threadPoolService);
                 parallelOkDemo.userTransfer(BigInteger.valueOf(count), BigInteger.valueOf(qps));
                 break;
-
             default:
                 System.out.println("invalid command: " + command);
                 Usage();
@@ -164,6 +165,11 @@ public class ParallelOkPerf {
                 dagUserInfo.loadDagTransferUser();
                 dagPrecompiledDemo = new DagPrecompiledDemo(client, dagUserInfo, threadPoolService);
                 dagPrecompiledDemo.userTransfer(BigInteger.valueOf(count), BigInteger.valueOf(qps));
+                break;
+            case "generateTx":
+                dagUserInfo.loadDagTransferUser();
+                dagPrecompiledDemo = new DagPrecompiledDemo(client, dagUserInfo, threadPoolService);
+                dagPrecompiledDemo.generateTx(BigInteger.valueOf(count), BigInteger.valueOf(qps));
                 break;
             default:
                 System.out.println("invalid command: " + command);

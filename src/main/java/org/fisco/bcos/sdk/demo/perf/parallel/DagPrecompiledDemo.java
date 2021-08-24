@@ -14,6 +14,9 @@
 package org.fisco.bcos.sdk.demo.perf.parallel;
 
 import com.google.common.util.concurrent.RateLimiter;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.text.SimpleDateFormat;
@@ -41,6 +44,7 @@ public class DagPrecompiledDemo {
     private final ThreadPoolService threadPoolService;
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     private static final String DAG_TRANSFER_ADDR = "0x0000000000000000000000000000000000005002";
+    private final Client client;
 
     public DagPrecompiledDemo(
             Client client, DagUserInfo dagUserInfo, ThreadPoolService threadPoolService) {
@@ -48,6 +52,7 @@ public class DagPrecompiledDemo {
         this.dagTransfer =
                 DagTransfer.load(
                         DAG_TRANSFER_ADDR, client, client.getCryptoSuite().getCryptoKeyPair());
+        this.client = client;
         this.dagUserInfo = dagUserInfo;
         this.collector = new PerformanceCollector();
     }
@@ -174,6 +179,74 @@ public class DagPrecompiledDemo {
         while (getted.get() < allUser.size()) {
             Thread.sleep(50);
         }
+    }
+
+    private void writeTxData(String fileName, String txData) {
+        try {
+            File file = new File(fileName);
+            // if file doesnt exists, then create it
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+            FileWriter fileWritter = new FileWriter(file.getName(), true);
+            BufferedWriter bufferWritter = new BufferedWriter(fileWritter);
+            bufferWritter.write(txData + "\n");
+            bufferWritter.close();
+        } catch (Exception e) {
+            logger.warn("write txData to file {} failed, error: ", fileName, e);
+        }
+    }
+
+    public void generateTx(BigInteger count, BigInteger tps) throws InterruptedException {
+
+        final BigInteger blockNumber = this.client.getBlockNumber().getBlockNumber();
+        System.out.println(
+                "Generate user transfer transaction, count:"
+                        + count
+                        + ", currentBlockNumber:"
+                        + blockNumber);
+        AtomicInteger generated = new AtomicInteger(0);
+        // transfer balance
+        for (Integer i = 0; i < count.intValue(); i++) {
+            final Integer index = i;
+            threadPoolService
+                    .getThreadPool()
+                    .execute(
+                            new Runnable() {
+                                @Override
+                                public void run() {
+                                    try {
+                                        DagTransferUser from = dagUserInfo.getFrom(index);
+                                        DagTransferUser to = dagUserInfo.getTo(index);
+                                        Random random = new Random();
+                                        int r = random.nextInt(100) + 1;
+                                        BigInteger amount = BigInteger.valueOf(r);
+                                        BigInteger increasedIndex =
+                                                BigInteger.valueOf(
+                                                        generated.longValue() / tps.longValue()
+                                                                + 500);
+                                        BigInteger blockLimit = blockNumber.add(increasedIndex);
+                                        String txData =
+                                                dagTransfer.getSignedTransactionForUserTransfer(
+                                                        blockLimit,
+                                                        from.getUser(),
+                                                        to.getUser(),
+                                                        amount);
+                                        writeTxData("tx.txt", txData);
+                                        generated.incrementAndGet();
+                                    } catch (Exception e) {
+                                        logger.warn(
+                                                "userTransfer transaction generate failed, error info: {}",
+                                                e.getMessage());
+                                    }
+                                }
+                            });
+        }
+        while (generated.intValue() != count.intValue()) {
+            Thread.sleep(2000);
+            logger.info(" total: {}, generated: {}", count.intValue(), generated.intValue());
+        }
+        System.exit(0);
     }
 
     public void userTransfer(BigInteger count, BigInteger qps) throws InterruptedException {
