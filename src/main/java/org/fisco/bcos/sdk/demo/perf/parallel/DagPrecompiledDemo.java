@@ -327,6 +327,42 @@ public class DagPrecompiledDemo {
         System.exit(0);
     }
 
+    public void generateCallData(BigInteger qps) throws InterruptedException {
+        System.out.println("Start generateCallData...");
+        RateLimiter rateLimiter = RateLimiter.create(qps.intValue());
+        List<DagTransferUser> allUser = dagUserInfo.getUserList();
+        AtomicInteger generated = new AtomicInteger(0);
+        for (Integer i = 0; i < allUser.size(); i++) {
+            final Integer index = i;
+            rateLimiter.acquire();
+            threadPoolService
+                    .getThreadPool()
+                    .execute(
+                            new Runnable() {
+                                @Override
+                                public void run() {
+                                    try {
+                                        String callData =
+                                                dagTransfer.getUserBalanceCallData(
+                                                        allUser.get(index).getUser());
+                                        writeTxData("calldata.txt", callData);
+                                        generated.incrementAndGet();
+                                    } catch (Exception e) {
+                                        logger.error(
+                                                "get amount failed, error info: {}",
+                                                e.getMessage());
+                                    }
+                                }
+                            });
+        }
+        while (generated.intValue() != allUser.size()) {
+            Thread.sleep(2000);
+            logger.info(" total: {}, generated: {}", generated.intValue(), generated.intValue());
+        }
+        System.out.println(" \tuser count is " + allUser.size());
+        System.exit(0);
+    }
+
     public void veryTransferData(BigInteger qps) throws InterruptedException {
         System.out.println("Start veryTransferData...");
         RateLimiter rateLimiter = RateLimiter.create(qps.intValue());

@@ -135,6 +135,16 @@ public class DagTransfer extends Contract {
                 (BigInteger) results.get(0).getValue(), (BigInteger) results.get(1).getValue());
     }
 
+    public String getUserBalanceCallData(String user) throws ContractException {
+        final Function function =
+                new Function(
+                        FUNC_USERBALANCE,
+                        Arrays.<Type>asList(new org.fisco.bcos.sdk.abi.datatypes.Utf8String(user)),
+                        Arrays.<TypeReference<?>>asList(
+                                new TypeReference<Uint256>() {}, new TypeReference<Uint256>() {}));
+        return functionEncoder.encode(function);
+    }
+
     public TransactionReceipt userAdd(String user, BigInteger balance) {
         final Function function =
                 new Function(
